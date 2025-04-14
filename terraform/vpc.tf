@@ -2,7 +2,7 @@ resource "aws_vpc" "vpc" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    Name = "vpc-jenkins-instance"
+    Name = "vpc-fedora-apache-docker-instance"
   }
 }
 
@@ -61,7 +61,7 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "subnet-vpc-jenkins-instance"
+    Name = "subnet-vpc-fedora-apache-docker-instance"
   }
 }
 
@@ -69,7 +69,7 @@ resource "aws_internet_gateway" "router" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "router-vpc-jenkins-instance"
+    Name = "router-vpc-fedora-apache-docker-instance"
   }
 }
 
@@ -82,7 +82,7 @@ resource "aws_route_table" "route_table" {
   }
 
   tags = {
-    Name = "route_table-vpc-gatweway-subnet-jenkins-instance"
+    Name = "route_table-vpc-gatweway-subnet-fedora-apache-docker-instance"
   }
 }
 
