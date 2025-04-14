@@ -8,4 +8,4 @@ sudo apt update -y
 sudo apt install docker-ce docker-ce-cli containerd.io -y
 
 
-sudo docker run -d -p 8080:8080 --name apache httpd:latest
+sudo docker run -d -p 8080:80 --name apache httpd:latest
