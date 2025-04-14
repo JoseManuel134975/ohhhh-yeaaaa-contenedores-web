@@ -1,20 +1,11 @@
 #!/bin/bash
 
-sudo dnf update -y
-# sudo dnf -y install dnf-plugins-core
-# sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-# sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-# sudo systemctl enable --now docker
-
-sudo firewall-cmd --add-port=22/tcp --permanent
-sudo firewall-cmd --reload
-sudo firewall-cmd --add-port=8080/tcp --permanent
-sudo firewall-cmd --reload
-
-sudo dnf -y install openssh-server
-sudo systemctl enable sshd
-sudo systemctl start sshd
+sudo apt update -y
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update -y
+sudo apt install docker-ce docker-ce-cli containerd.io -y
 
 
-
-# sudo docker run -d -p 8080:80 --name apache httpd:latest
+sudo docker run -d -p 8080:8080 --name apache httpd:latest

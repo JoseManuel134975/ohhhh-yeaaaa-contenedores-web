@@ -1,5 +1,5 @@
 aws_region    = "us-east-1"
-ami_id        = "ami-0004e6698b7d6613c"
+ami_id        = "ami-064519b8c76274859"
 instance_type = "t2.micro"
 name          = "Fedora-Apache"
 access_key    = "ASIAXUK5NAAK3V6FR6R2"
