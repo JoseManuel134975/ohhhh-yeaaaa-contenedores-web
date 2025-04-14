@@ -7,6 +7,10 @@ sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 sudo systemctl enable --now docker
 
 
+sudo dnf -y install openssh-server
+sudo systemctl enable sshd
+sudo systemctl start sshd
+
 
 
 sudo docker run -d -p 8080:80 --name apache httpd:latest
