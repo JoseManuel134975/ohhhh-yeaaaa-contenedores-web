@@ -6,6 +6,10 @@ sudo dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/do
 sudo dnf -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo systemctl enable --now docker
 
+sudo firewall-cmd --add-port=22/tcp --permanent
+sudo firewall-cmd --reload
+sudo firewall-cmd --add-port=8080/tcp --permanent
+sudo firewall-cmd --reload
 
 sudo dnf -y install openssh-server
 sudo systemctl enable sshd
