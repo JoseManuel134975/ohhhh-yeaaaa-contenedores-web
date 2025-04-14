@@ -1,0 +1,7 @@
+aws_region    = "us-east-1"
+ami_id        = "ami-0004e6698b7d6613c"
+instance_type = "t2.micro"
+name          = "Fedora-Apache"
+access_key    = ""
+secret_key    = ""
+session_token = ""
