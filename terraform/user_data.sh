@@ -7,4 +7,6 @@ sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin dock
 sudo systemctl enable --now docker
 
 
-sudo docker run -d -p 8080:8080 --name apache httpd/httpd:lts
+
+
+sudo docker run -d -p 8080:80 --name apache httpd:latest
