@@ -8,4 +8,63 @@ sudo apt update -y
 sudo apt install docker-ce docker-ce-cli containerd.io -y
 
 
-sudo docker run -d -p 8080:80 --name apache httpd:latest
+sudo touch httpd.conf
+
+sudo echo -e "LoadModule ssl_module modules/mod_ssl.so" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "LoadModule rewrite_module modules/mod_rewrite.so" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "LoadModule headers_module modules/mod_headers.so" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "LoadModule auth_basic_module modules/mod_auth_basic.so" | sudo tee -a httpd.conf > /dev/null 
+
+sudo echo -e "DocumentRoot /usr/local/apache2/htdocs" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "Listen 80" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "Listen 443" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "Include conf/extra/httpd-vhosts.conf" | sudo tee -a httpd.conf > /dev/null 
+
+sudo echo -e "<VirtualHost *:80>
+    Redirect permanent / https://your-domain.com/
+</VirtualHost>" | sudo tee -a httpd.conf > /dev/null 
+
+sudo echo -e "AddLanguage en .en" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "AddLanguage en .es" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "LanguagePriority en es" | sudo tee -a httpd.conf > /dev/null 
+sudo echo -e "<Directory "/usr/local/apache2/htdocs">
+    AuthType Basic
+    AuthName "Restricted Access"
+    AuthUserFile /usr/local/apache2/conf/.htpasswd
+    Require valid-user
+</Directory>" | sudo tee -a httpd.conf > /dev/null 
+
+
+sudo touch my_vh.conf
+
+sudo echo -e "<VirtualHost *:443>
+    DocumentRoot "/usr/local/apache2/htdocs/"
+    ServerName your-domain.com
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/cert.pem
+    SSLCertificateKeyFile /etc/ssl/private/key.pem
+
+    # Configuración de error 404 y otras páginas de error
+    ErrorDocument 404 /error404.html
+
+    # Redirección y configuración adicional
+    RewriteEngine On
+    RewriteRule ^/oldpage$ /newpage [R=301,L]
+</VirtualHost>" | sudo tee -a my_vh.conf > /dev/null 
+
+
+# echo -e "DocumentRoot /var/www/html" | sudo tee -a /etc/httpd/conf/httpd.conf > /dev/null
+
+sudo touch dockerfile
+
+sudo echo -e "FROM httpd:latest" | sudo tee -a dockerfile > /dev/null 
+sudo echo -e "RUN apt-get update" | sudo tee -a dockerfile > /dev/null 
+sudo echo -e "WORKDIR /usr/local/apache2/conf" | sudo tee -a dockerfile > /dev/null 
+sudo echo -e "RUN htpasswd -cb .htpasswd admin admin" | sudo tee -a dockerfile > /dev/null 
+sudo echo -e "COPY my_httpd.conf /usr/local/apache2/conf/httpd.conf" | sudo tee -a dockerfile > /dev/null 
+sudo echo -e "EXPOSE 80 443" | sudo tee -a dockerfile > /dev/null 
+
+
+sudo docker build -t my-image:my-image .
+sudo docker run -d --name my-container -p 8080:80 -p 8443:443 my-image:my-image
+# sudo docker run -d -p 8080:80 --name apache httpd:latest
