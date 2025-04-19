@@ -64,4 +64,3 @@ echo -e "EXPOSE 80 443" | sudo tee -a dockerfile > /dev/null
 
 sudo docker build -t my-image:my-image .
 sudo docker run -d --name my-container -p 8080:80 -p 8443:443 my-image:my-image
-# sudo docker run -d -p 8080:80 --name apache httpd:latest
