@@ -56,7 +56,7 @@ echo -e "<VirtualHost *:443>
 
 touch dockerfile
 
-echo -e "FROM my_httpd:latest" | sudo tee -a dockerfile > /dev/null 
+echo -e "FROM httpd:latest" | sudo tee -a dockerfile > /dev/null 
 echo -e "RUN apt-get update" | sudo tee -a dockerfile > /dev/null 
 echo -e "WORKDIR /usr/local/apache2/conf" | sudo tee -a dockerfile > /dev/null 
 echo -e "RUN htpasswd -cb .htpasswd admin admin" | sudo tee -a dockerfile > /dev/null 
