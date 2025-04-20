@@ -14,7 +14,7 @@ touch dockerfile
 
 echo -e "FROM httpd:latest" | sudo tee -a dockerfile > /dev/null 
 echo -e "RUN apt update" | sudo tee -a dockerfile > /dev/null 
-echo -e "RUN apt install nano" | sudo tee -a dockerfile > /dev/null 
+echo -e "RUN apt install nano -y" | sudo tee -a dockerfile > /dev/null 
 echo -e "EXPOSE 80" | sudo tee -a dockerfile > /dev/null 
 echo -e "EXPOSE 443" | sudo tee -a dockerfile > /dev/null 
 
