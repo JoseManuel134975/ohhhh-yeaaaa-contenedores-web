@@ -13,6 +13,45 @@ sudo systemctl start docker
 cd /home/admin
 touch httpd.conf
 
+echo -e "LoadModule mpm_event_module modules/mod_mpm_event.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule authn_file_module modules/mod_authn_file.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule authn_core_module modules/mod_authn_core.so" | sudo tee -a httpd.conf > /dev/null 
+echo -e "LoadModule authz_host_module modules/mod_authz_host.so" | sudo tee -a httpd.conf > /dev/null 
+echo -e "LoadModule authz_groupfile_module modules/mod_authz_groupfile.so" | sudo tee -a httpd.conf > /dev/null 
+echo -e "LoadModule authz_user_module modules/mod_authz_user.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule authz_core_module modules/mod_authz_core.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule access_compat_module modules/mod_access_compat.so" | sudo tee -a httpd.conf > /dev/null 
+echo -e "LoadModule auth_basic_module modules/mod_auth_basic.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule reqtimeout_module modules/mod_reqtimeout.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule filter_module modules/mod_filter.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule mime_module modules/mod_mime.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule log_config_module modules/mod_log_config.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule env_module modules/mod_env.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule headers_module modules/mod_headers.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule setenvif_module modules/mod_setenvif.so" | sudo tee -a httpd.conf > /dev/null 
+echo -e "LoadModule version_module modules/mod_version.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule unixd_module modules/mod_unixd.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule status_module modules/mod_status.so" | sudo tee -a httpd.conf > /dev/null 
+echo -e "LoadModule autoindex_module modules/mod_autoindex.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule dir_module modules/mod_dir.so" | sudo tee -a httpd.conf > /dev/null 
+
+echo -e "LoadModule alias_module modules/mod_alias.so" | sudo tee -a httpd.conf > /dev/null 
+
+
 echo -e "LoadModule ssl_module modules/mod_ssl.so" | sudo tee -a httpd.conf > /dev/null 
 echo -e "LoadModule rewrite_module modules/mod_rewrite.so" | sudo tee -a httpd.conf > /dev/null 
 echo -e "LoadModule headers_module modules/mod_headers.so" | sudo tee -a httpd.conf > /dev/null 
