@@ -164,50 +164,12 @@ LoadModule rewrite_module modules/mod_rewrite.so
 " | sudo tee -a httpd.conf > /dev/null 
 
 echo -e "<IfModule unixd_module>
-#
-# If you wish httpd to run as a different user or group, you must run
-# httpd as root initially and it will switch.
-#
-# User/Group: The name (or #number) of the user/group to run httpd as.
-# It is usually good practice to create a dedicated user and group for
-# running httpd, as with most system services.
-#
 User www-data
 Group www-data
 
 </IfModule>
 
-# 'Main' server configuration
-#
-# The directives in this section set up the values used by the 'main'
-# server, which responds to any requests that aren't handled by a
-# <VirtualHost> definition.  These values also provide defaults for
-# any <VirtualHost> containers you may define later in the file.
-#
-# All of these directives may appear inside <VirtualHost> containers,
-# in which case these default settings will be overridden for the
-# virtual host being defined.
-#
-
-#
-# ServerAdmin: Your address, where problems with the server should be
-# e-mailed.  This address appears on some server-generated pages, such
-# as error documents.  e.g. admin@your-domain.com
-#
 ServerAdmin you@example.com
-
-#
-# ServerName gives the name and port that the server uses to identify itself.
-# This can often be determined automatically, but we recommend you specify
-# it explicitly to prevent problems during startup.
-#
-# If your host doesn't have a registered DNS name, enter its IP address here.
-#
-#ServerName www.example.com:80
-
-#
-# Deny access to the entirety of your server's filesystem. You must
-# explicitly permit access to web content directories in other
 " | sudo tee -a httpd.conf > /dev/null 
 
 echo -e "<Directory />
@@ -215,151 +177,46 @@ echo -e "<Directory />
     Require all denied
 </Directory>
 
-#
-# Note that from this point forward you must specifically allow
-# particular features to be enabled - so if something's not working as
-# you might expect, make sure that you have specifically enabled it
-# below.
-#
-
-#
-# DocumentRoot: The directory out of which you will serve your
-# documents. By default, all requests are taken from this directory, but
-# symbolic links and aliases may be used to point to other locations.
-#
 DocumentRoot "/usr/local/apache2/htdocs"
 <Directory "/usr/local/apache2/htdocs">
-    #
-    # Possible values for the Options directive are "None", "All",
-    # or any combination of:
-    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
-    #
-    # Note that "MultiViews" must be named *explicitly* --- "Options All"
-    # doesn't give it to you.
-    #
-    # The Options directive is both complicated and important.  Please see
-    # http://httpd.apache.org/docs/2.4/mod/core.html#options
-    # for more information.
-    #
     Options Indexes FollowSymLinks
-
-    #
-    # AllowOverride controls what directives may be placed in .htaccess files.
-    # It can be "All", "None", or any combination of the keywords:
-    #   AllowOverride FileInfo AuthConfig Limit
-    #
     AllowOverride None
-
-    #
-    # Controls who can get stuff from this server.
-    #
     Require all granted
 
     AuthType Basic
     AuthName "Restricted Access"
     AuthUserFile /usr/local/apache2/conf/.htpasswd
     Require valid-user
-
 </Directory>
 " | sudo tee -a httpd.conf > /dev/null 
 
 echo -e "<IfModule dir_module>
     DirectoryIndex index.html
 </IfModule>
-
-#
-# The following lines prevent .htaccess and .htpasswd files from being
-# viewed by Web clients.
-#
 <Files ".ht*">
     Require all denied
 </Files>
-
-#
-# ErrorLog: The location of the error log file.
-# If you do not specify an ErrorLog directive within a <VirtualHost>
-# container, error messages relating to that virtual host will be
-# logged here.  If you *do* define an error logfile for a <VirtualHost>
-# container, that host's errors will be logged there and not here.
-#
 ErrorLog /proc/self/fd/2
-
-#
-# LogLevel: Control the number of messages logged to the error_log.
-# Possible values include: debug, info, notice, warn, error, crit,
-# alert, emerg.
-#
 LogLevel warn" | sudo tee -a httpd.conf > /dev/null 
 
 echo -e "<IfModule log_config_module>
-    #
-    # The following directives define some format nicknames for use with
-    # a CustomLog directive (see below).
-    #
     LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
     LogFormat "%h %l %u %t \"%r\" %>s %b" common
 
     <IfModule logio_module>
-      # You need to enable mod_logio.c to use %I and %O
       LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %I %O" combinedio
     </IfModule>
-
-    #
-    # The location and format of the access logfile (Common Logfile Format).
-    # If you do not define any access logfiles within a <VirtualHost>
-    # container, they will be logged here.  Contrariwise, if you *do*
-    # define per-<VirtualHost> access logfiles, transactions will be
-    # logged therein and *not* in this file.
-    #
     CustomLog /proc/self/fd/1 common
-
-    #
-    # If you prefer a logfile with access, agent, and referer information
-    # (Combined Logfile Format) you can use the following directive.
-    #
-    #CustomLog "logs/access_log" combined
 </IfModule>
 " | sudo tee -a httpd.conf > /dev/null 
 
 
 echo -e "<IfModule alias_module>
-    #
-    # Redirect: Allows you to tell clients about documents that used to
-    # exist in your server's namespace, but do not anymore. The client
-    # will make a new request for the document at its new location.
-    # Example:
-    # Redirect permanent /foo http://www.example.com/bar
-
-    #
-    # Alias: Maps web paths into filesystem paths and is used to
-    # access content that does not live under the DocumentRoot.
-    # Example:
-    # Alias /webpath /full/filesystem/path
-    #
-    # If you include a trailing / on /webpath then the server will
-    # require it to be present in the URL.  You will also likely
-    # need to provide a <Directory> section to allow access to
-    # the filesystem path.
-
-    #
-    # ScriptAlias: This controls which directories contain server scripts.
-    # ScriptAliases are essentially the same as Aliases, except that
-    # documents in the target directory are treated as applications and
-    # run by the server when requested rather than as documents sent to the
-    # client.  The same rules about trailing "/" apply to ScriptAlias
-    # directives as to Alias.
-    #
     ScriptAlias /cgi-bin/ "/usr/local/apache2/cgi-bin/"
-
 </IfModule>
 " | sudo tee -a httpd.conf > /dev/null 
 
 echo -e "<IfModule cgid_module>
-    #
-    # ScriptSock: On threaded servers, designate the path to the UNIX
-    # socket used to communicate with the CGI daemon of mod_cgid.
-    #
-    #Scriptsock cgisock
 </IfModule>
 " | sudo tee -a httpd.conf > /dev/null 
 
@@ -372,78 +229,25 @@ echo -e "<Directory "/usr/local/apache2/cgi-bin">
 " | sudo tee -a httpd.conf > /dev/null 
 
 echo -e "<IfModule headers_module>
-    #
-    # Avoid passing HTTP_PROXY environment to CGI's on this or any proxied
-    # backend servers which have lingering "httpoxy" defects.
-    # 'Proxy' request header is undefined by the IETF, not listed by IANA
-    #
     RequestHeader unset Proxy early
 </IfModule>
 " | sudo tee -a httpd.conf > /dev/null 
 
 
 echo -e "<IfModule mime_module>
-    #
-    # TypesConfig points to the file containing the list of mappings from
-    # filename extension to MIME-type.
-    #
     TypesConfig conf/mime.types
 
-    #
-    # AddType allows you to add to or override the MIME configuration
-    # file specified in TypesConfig for specific file types.
-    #
-    #AddType application/x-gzip .tgz
-    #
-    # AddEncoding allows you to have certain browsers uncompress
-    # information on the fly. Note: Not all browsers support this.
-    #
-    #AddEncoding x-compress .Z
-    #AddEncoding x-gzip .gz .tgz
-    #
-    # If the AddEncoding directives above are commented-out, then you
-    # probably should define those extensions to indicate media types:
-    #
     AddType application/x-compress .Z
     AddType application/x-gzip .gz .tgz
-
-    #
-    # AddHandler allows you to map certain file extensions to "handlers":
-    # actions unrelated to filetype. These can be either built into the server
-    # or added with the Action directive (see below)
-    #
-    # To use CGI scripts outside of ScriptAliased directories:
-    # (You will also need to add "ExecCGI" to the "Options" directive.)
-    #
-    #AddHandler cgi-script .cgi
-
-    # For type maps (negotiated resources):
-    #AddHandler type-map var
-
-    #
-    # Filters allow you to process content before it is sent to the client.
-    #
-    # To parse .shtml files for server-side includes (SSI):
-    # (You will also need to add "Includes" to the "Options" directive.)
-    #
-    #AddType text/html .shtml
 </IfModule>
 " | sudo tee -a httpd.conf > /dev/null 
 
 
 
-echo -e "# Configure mod_proxy_html to understand HTML4/XHTML1
-<IfModule proxy_html_module>
+echo -e "<IfModule proxy_html_module>
 Include conf/extra/proxy-html.conf
 </IfModule>
 
-# Secure (SSL/TLS) connections
-#Include conf/extra/httpd-ssl.conf
-#
-# Note: The following must must be present to support
-#       starting without SSL on platforms with no /dev/random equivalent
-#       but a statically compiled-in mod_ssl.
-#
 <IfModule ssl_module>
 SSLRandomSeed startup builtin
 SSLRandomSeed connect builtin
@@ -451,61 +255,6 @@ SSLRandomSeed connect builtin
 " | sudo tee -a httpd.conf > /dev/null 
 
 
-# echo -e "LoadModule mpm_event_module modules/mod_mpm_event.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule authn_file_module modules/mod_authn_file.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule authn_core_module modules/mod_authn_core.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule authz_host_module modules/mod_authz_host.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule authz_groupfile_module modules/mod_authz_groupfile.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule authz_user_module modules/mod_authz_user.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule authz_core_module modules/mod_authz_core.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule access_compat_module modules/mod_access_compat.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule auth_basic_module modules/mod_auth_basic.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule reqtimeout_module modules/mod_reqtimeout.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule filter_module modules/mod_filter.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule mime_module modules/mod_mime.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule log_config_module modules/mod_log_config.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule env_module modules/mod_env.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule headers_module modules/mod_headers.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule setenvif_module modules/mod_setenvif.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule version_module modules/mod_version.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule unixd_module modules/mod_unixd.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule status_module modules/mod_status.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule autoindex_module modules/mod_autoindex.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule dir_module modules/mod_dir.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule alias_module modules/mod_alias.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "LoadModule negotiation_module modules/mod_negotiation.so" | sudo tee -a httpd.conf > /dev/null 
-
-
-# echo -e "LoadModule ssl_module modules/mod_ssl.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule rewrite_module modules/mod_rewrite.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule headers_module modules/mod_headers.so" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "LoadModule auth_basic_module modules/mod_auth_basic.so" | sudo tee -a httpd.conf > /dev/null 
-
-# echo -e "DocumentRoot /usr/local/apache2/htdocs" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "Listen 80" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "Listen 443" | sudo tee -a httpd.conf > /dev/null 
-# echo -e "<Directory "/usr/local/apache2/htdocs">
-#     AuthType Basic
-#     AuthName "Restricted Access"
-#     AuthUserFile /usr/local/apache2/conf/.htpasswd
-#     Require valid-user
-# </Directory>" | sudo tee -a httpd.conf > /dev/null 
 
 
 touch vh.conf
@@ -537,5 +286,3 @@ echo -e "EXPOSE 80 443" | sudo tee -a dockerfile > /dev/null
 
 sudo docker build -t my-image:my-image .
 sudo docker run -d --name my-container -p 8080:80 -p 8443:443 my-image:my-image
-
-# docker run -d --name mi-apache -p 8080:80 httpd
