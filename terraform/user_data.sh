@@ -51,6 +51,8 @@ echo -e "LoadModule dir_module modules/mod_dir.so" | sudo tee -a httpd.conf > /d
 
 echo -e "LoadModule alias_module modules/mod_alias.so" | sudo tee -a httpd.conf > /dev/null 
 
+echo -e "LoadModule negotiation_module modules/mod_negotiation.so" | sudo tee -a httpd.conf > /dev/null 
+
 
 echo -e "LoadModule ssl_module modules/mod_ssl.so" | sudo tee -a httpd.conf > /dev/null 
 echo -e "LoadModule rewrite_module modules/mod_rewrite.so" | sudo tee -a httpd.conf > /dev/null 
