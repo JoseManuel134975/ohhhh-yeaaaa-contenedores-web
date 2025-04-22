@@ -10,13 +10,39 @@ sudo systemctl enable docker
 sudo systemctl start docker
 
 cd /home/admin
-touch dockerfile
+sudo mkdir dockerfiles
+touch dockerfiles/dockerfile_apache
 
-echo -e "FROM httpd:latest" | sudo tee -a dockerfile > /dev/null 
-echo -e "RUN apt update" | sudo tee -a dockerfile > /dev/null 
-echo -e "RUN apt install nano -y" | sudo tee -a dockerfile > /dev/null 
-echo -e "EXPOSE 80" | sudo tee -a dockerfile > /dev/null 
-echo -e "EXPOSE 443" | sudo tee -a dockerfile > /dev/null 
 
-sudo docker build -t my-image:my-image .
-sudo docker run -d --name my-container -p 8080:80 -p 8443:443 my-image:my-image
+echo -e "FROM httpd:latest" | sudo tee -a dockerfile_apache > /dev/null 
+echo -e "RUN apt update" | sudo tee -a dockerfile_apache > /dev/null 
+echo -e "RUN apt install nano -y" | sudo tee -a dockerfile_apache > /dev/null 
+echo -e "EXPOSE 80" | sudo tee -a dockerfile_apache > /dev/null 
+echo -e "EXPOSE 443" | sudo tee -a dockerfile_apache > /dev/null 
+
+
+touch dockerfiles/dockerfile_tomcat
+echo -e "FROM tomcat:latest" | sudo tee -a dockerfile_tomcat > /dev/null 
+
+
+touch docker-compose.yml
+echo -e "version: '3.8'
+
+services:
+  httpd:
+    build:
+      context: ./dockerfiles/dockerfile_apache
+    image: josemanuel:httpd
+    container_name: httpd-container
+    ports:
+      - "8080:80"
+      - "8443:443"
+
+  tomcat:
+    build:
+      context: ./dockerfiles/dockerfile_tomcat
+    image: josemanuel:tomcat
+    container_name: tomcat-container
+    ports:
+      - "8081:8080"
+" | sudo tee -a docker-compose.yml > /dev/null
