@@ -13,6 +13,8 @@ sudo systemctl enable docker
 sudo systemctl start docker
 
 cd /home/admin
+curl -O https://tomcat.apache.org/tomcat-6.0-doc/appdev/sample/sample.war
+
 touch docker-compose.yml
 
 echo -e "version: '3.8'
@@ -27,7 +29,7 @@ services:
     ports:
       - 8081:8080
     volumes:
-      - C:/Users/josem/Downloads/sample.war:/usr/local/tomcat/webapps/sample.war" | sudo tee -a docker-compose.yml > /dev/null
+      - /home/admin/sample.war:/usr/local/tomcat/webapps/sample.war" | sudo tee -a docker-compose.yml > /dev/null
 
 
 sudo docker-compose up
