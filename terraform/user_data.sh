@@ -6,43 +6,29 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.
 sudo apt update -y
 sudo apt install docker-ce docker-ce-cli containerd.io -y
 
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
 sudo systemctl enable docker
 sudo systemctl start docker
 
 cd /home/admin
-sudo mkdir dockerfiles
+mkdir dockerfiles
 touch dockerfiles/dockerfile_apache
-
-
-echo -e "FROM httpd:latest" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
-echo -e "RUN apt update" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
-echo -e "RUN apt install nano -y" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
-echo -e "EXPOSE 80" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
-echo -e "EXPOSE 443" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
-
-
 touch dockerfiles/dockerfile_tomcat
-echo -e "FROM tomcat:latest" | sudo tee -a dockerfiles/dockerfile_tomcat > /dev/null 
-
 
 touch docker-compose.yml
 echo -e "version: '3.8'
-
 services:
-  httpd:
-    build:
-      context: ./dockerfiles/dockerfile_apache
-    image: josemanuel:httpd
-    container_name: httpd-container
+  apache:
+    image: httpd:latest
     ports:
-      - "8080:80"
-      - "8443:443"
-
+      - 8080:80
+      
   tomcat:
-    build:
-      context: ./dockerfiles/dockerfile_tomcat
-    image: josemanuel:tomcat
-    container_name: tomcat-container
+    image: tomcat:latest
     ports:
-      - "8081:8080"
-" | sudo tee -a docker-compose.yml > /dev/null
+      - 8081:8080"
+
+
+sudo docker-compose up
