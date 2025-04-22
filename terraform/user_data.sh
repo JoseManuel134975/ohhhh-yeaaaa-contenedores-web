@@ -14,15 +14,15 @@ sudo mkdir dockerfiles
 touch dockerfiles/dockerfile_apache
 
 
-echo -e "FROM httpd:latest" | sudo tee -a dockerfile_apache > /dev/null 
-echo -e "RUN apt update" | sudo tee -a dockerfile_apache > /dev/null 
-echo -e "RUN apt install nano -y" | sudo tee -a dockerfile_apache > /dev/null 
-echo -e "EXPOSE 80" | sudo tee -a dockerfile_apache > /dev/null 
-echo -e "EXPOSE 443" | sudo tee -a dockerfile_apache > /dev/null 
+echo -e "FROM httpd:latest" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
+echo -e "RUN apt update" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
+echo -e "RUN apt install nano -y" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
+echo -e "EXPOSE 80" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
+echo -e "EXPOSE 443" | sudo tee -a dockerfiles/dockerfile_apache > /dev/null 
 
 
 touch dockerfiles/dockerfile_tomcat
-echo -e "FROM tomcat:latest" | sudo tee -a dockerfile_tomcat > /dev/null 
+echo -e "FROM tomcat:latest" | sudo tee -a dockerfiles/dockerfile_tomcat > /dev/null 
 
 
 touch docker-compose.yml
