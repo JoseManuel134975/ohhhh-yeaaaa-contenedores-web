@@ -27,7 +27,7 @@ services:
   tomcat:
     image: tomcat:latest
     ports:
-      - 8081:8080
+      - 9090:9090
     volumes:
       - /home/admin/sample.war:/usr/local/tomcat/webapps/sample.war" | sudo tee -a docker-compose.yml > /dev/null
 
