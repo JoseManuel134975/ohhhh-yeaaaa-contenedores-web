@@ -25,7 +25,7 @@ services:
   tomcat:
     image: tomcat:latest
     ports:
-      - 8081:8080"
+      - 8081:8080" | sudo tee -a docker-compose.yml > /dev/null
 
 
 sudo docker-compose up
