@@ -13,11 +13,8 @@ sudo systemctl enable docker
 sudo systemctl start docker
 
 cd /home/admin
-mkdir dockerfiles
-touch dockerfiles/dockerfile_apache
-touch dockerfiles/dockerfile_tomcat
-
 touch docker-compose.yml
+
 echo -e "version: '3.8'
 services:
   apache:
